@@ -140,7 +140,11 @@ export default function Page() {
 
         <AIExtractionPanel />
 
-        <PublicVerifier log={publicLog} resetKey={resetKey} />
+        <PublicVerifier
+          log={publicLog}
+          resetKey={resetKey}
+          analyzing={vendorA.status === 'analyzing' || vendorB.status === 'analyzing'}
+        />
 
         <DemoControls onReset={resetDemo} />
       </main>
