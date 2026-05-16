@@ -8,4 +8,4 @@
     "requiredCredential": "freshness_verified",
     "forbiddenTerm": "campaign_metadata_reuse",
     "intentSalt": "intent_salt_demo_001"
-  }
+}
