@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../",
+  "sources": ["SilentIntent.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAAA;;;;;;;;;;MA2BA,AAAA,cAEC;;OAAA;MAGD,AAAA,aAEC;;OAAA;;;;GACA;EAnCD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IAmBA;;;;;;;;;yEAAuC;IACvC;;;;;;;;;yEAAyC;IACzC;;;;;;;;;yEAA4C;IAC5C;;;;;;;;;yEAA0C;IAC1C;;;;;;;;;yEAA0C;IAC1C;;;;;;;;;yEAAyC;;;;;;;GAWxC;EARD,AAAA,iBAEC,CAF6B,aAA6B,gBAE1D;EAGD,AAAA,gBAEC,CAF4B,WAA2B,gBAEvD;;;;;;;;;;;;;;;;IAfD;qCAAA;;;;;;;;;;;0GAAuC;KAAA;IACvC;qCAAA;;;;;;;;;;;0GAAyC;KAAA;IACzC;qCAAA;;;;;;;;;;;0GAA4C;KAAA;IAC5C;qCAAA;;;;;;;;;;;0GAA0C;KAAA;IAC1C;qCAAA;;;;;;;;;;;0GAA0C;KAAA;IAC1C;qCAAA;;;;;;;;;;;0GAAyC;KAAA;;;;;;;;EAGzC,AAAA,cAEC;;;;UAF6B,aAA6B;4CAA7B,aAA6B;GAE1D;EAGD,AAAA,aAEC;;;;UAF4B,WAA2B;2CAA3B,WAA2B;GAEvD;;;;"
+}

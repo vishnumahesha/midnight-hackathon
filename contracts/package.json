@@ -1,0 +1,8 @@
+{
+  "name": "silentintent-contracts",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "0.16.0"
+  }
+}
