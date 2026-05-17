@@ -1,0 +1,111 @@
+pragma language_version >= 0.14;
+import CompactStandardLibrary;
+
+// ── Private witnesses: buyer's hidden procurement policy ─────────────────────
+witness maxPriceCents(): Uint<64>;
+witness requiredCredentialHash(): Bytes<32>;
+witness forbiddenTermHash(): Bytes<32>;
+witness intentSalt(): Bytes<32>;
+
+// ── Private witnesses: vendor's offer (extracted by AI) ──────────────────────
+witness offerPriceCents(): Uint<64>;
+witness offerCredentialHashes(): Vector<4, Bytes<32>>;
+witness offerDetectedForbiddenHashes(): Vector<4, Bytes<32>>;
+witness offerSalt(): Bytes<32>;
+
+// ── Price band code: prover-supplied, range-checked in-circuit ────────────────
+// Band boundaries (cents): 1=$0-$500, 2=$500-$1k, 3=$1k-$2k,
+//   4=$2k-$2.5k, 5=$2.5k-$5k, 6=$5k-$10k, 7=$10k+
+// Prover cannot forge a cheaper-looking band: range assertions force unique code.
+witness offerPriceBandCode(): Uint<8>;
+
+// ── Public ledger state (visible on-chain after proof) ───────────────────────
+export ledger dealId: Opaque<"string">;
+export ledger policyId: Opaque<"string">;
+export ledger policyVerified: Boolean;
+export ledger priceBandCode: Uint<8>;
+export ledger intentCommitment: Bytes<32>;
+export ledger offerCommitment: Bytes<32>;
+
+// ── Circuit 1: Buyer registers hidden intent as an on-chain commitment ────────
+export circuit registerIntent(newPolicyId: Opaque<"string">): [] {
+  const buyerMaxPrice: Uint<64>  = maxPriceCents();
+  const buyerCredHash: Bytes<32> = requiredCredentialHash();
+  const buyerForbidHash: Bytes<32> = forbiddenTermHash();
+  const buyerSalt: Bytes<32>     = intentSalt();
+
+  const commitment: Bytes<32> = persistentHash<[Uint<64>, Bytes<32>, Bytes<32>, Bytes<32>]>(
+    [buyerMaxPrice, buyerCredHash, buyerForbidHash, buyerSalt]
+  );
+
+  policyId         = disclose(newPolicyId);
+  intentCommitment = disclose(commitment);
+  policyVerified   = false;
+}
+
+// ── Circuit 2: Evaluate a vendor offer against the stored intent commitment ───
+export circuit evaluateOffer(newDealId: Opaque<"string">): [] {
+  const vendorPrice: Uint<64> = offerPriceCents();
+  const buyerMaxPrice: Uint<64> = maxPriceCents();
+  const buyerCredHash: Bytes<32> = requiredCredentialHash();
+  const buyerForbidHash: Bytes<32> = forbiddenTermHash();
+  const buyerSalt: Bytes<32> = intentSalt();
+
+  // Constraint 1: Price must not exceed buyer's hidden maximum
+  assert(vendorPrice <= buyerMaxPrice, "Offer price exceeds maximum allowed price");
+
+  // Constraint 2: Stored intent commitment must match hash of private witnesses
+  const computedIntent: Bytes<32> = persistentHash<[Uint<64>, Bytes<32>, Bytes<32>, Bytes<32>]>(
+    [buyerMaxPrice, buyerCredHash, buyerForbidHash, buyerSalt]
+  );
+  assert(intentCommitment == computedIntent, "Intent commitment mismatch");
+
+  // Constraint 3: Required credential must appear in the offer's credential list
+  const credHashes: Vector<4, Bytes<32>> = offerCredentialHashes();
+  const hasCredential: Boolean = (credHashes[0] == buyerCredHash)
+                              || (credHashes[1] == buyerCredHash)
+                              || (credHashes[2] == buyerCredHash)
+                              || (credHashes[3] == buyerCredHash);
+  assert(hasCredential, "Required credential not found in offer");
+
+  // Constraint 4: Forbidden term must NOT appear in detected forbidden hashes
+  const forbidHashes: Vector<4, Bytes<32>> = offerDetectedForbiddenHashes();
+  const hasForbidden: Boolean = (forbidHashes[0] == buyerForbidHash)
+                             || (forbidHashes[1] == buyerForbidHash)
+                             || (forbidHashes[2] == buyerForbidHash)
+                             || (forbidHashes[3] == buyerForbidHash);
+  assert(!hasForbidden, "Forbidden term detected in offer");
+
+  // ── Constraint 5: Price band code is consistent with actual offer price ─────
+  // Uses assertion-based range proofs (no conditional branches — ZK-safe).
+  // Non-overlapping bands force a unique valid code for every price point.
+  const bandCode: Uint<8> = offerPriceBandCode();
+  assert((bandCode == 1) || (bandCode == 2) || (bandCode == 3) || (bandCode == 4)
+      || (bandCode == 5) || (bandCode == 6) || (bandCode == 7),
+    "Price band code must be 1-7");
+  assert(!(bandCode == 1) || (vendorPrice <= 50000),
+    "Band 1: price must be <= $500");
+  assert(!(bandCode == 2) || (!(vendorPrice <= 50000) && (vendorPrice <= 100000)),
+    "Band 2: price must be $500-$1,000");
+  assert(!(bandCode == 3) || (!(vendorPrice <= 100000) && (vendorPrice <= 200000)),
+    "Band 3: price must be $1,000-$2,000");
+  assert(!(bandCode == 4) || (!(vendorPrice <= 200000) && (vendorPrice <= 250000)),
+    "Band 4: price must be $2,000-$2,500");
+  assert(!(bandCode == 5) || (!(vendorPrice <= 250000) && (vendorPrice <= 500000)),
+    "Band 5: price must be $2,500-$5,000");
+  assert(!(bandCode == 6) || (!(vendorPrice <= 500000) && (vendorPrice <= 1000000)),
+    "Band 6: price must be $5,000-$10,000");
+  assert(!(bandCode == 7) || !(vendorPrice <= 1000000),
+    "Band 7: price must be > $10,000");
+
+  // ── Ledger writes ──────────────────────────────────────────────────────────
+  const vendorSalt: Bytes<32> = offerSalt();
+  const offerComm: Bytes<32> = persistentHash<[Uint<64>, Vector<4, Bytes<32>>, Vector<4, Bytes<32>>, Bytes<32>]>(
+    [vendorPrice, credHashes, forbidHashes, vendorSalt]
+  );
+
+  dealId          = disclose(newDealId);
+  priceBandCode   = disclose(bandCode);
+  offerCommitment = disclose(offerComm);
+  policyVerified  = true;
+}
