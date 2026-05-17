@@ -9,7 +9,7 @@ export type Witnesses<PS> = {
   offerCredentialHashes(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array[]];
   offerDetectedForbiddenHashes(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array[]];
   offerSalt(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array];
-  offerPriceBand(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, string];
+  offerPriceBandCode(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, bigint];
 }
 
 export type ImpureCircuits<PS> = {
@@ -39,8 +39,8 @@ export type Circuits<PS> = {
 export type Ledger = {
   readonly dealId: string;
   readonly policyId: string;
-  readonly settlementAuthorized: boolean;
-  readonly priceBand: string;
+  readonly policyVerified: boolean;
+  readonly priceBandCode: bigint;
   readonly intentCommitment: Uint8Array;
   readonly offerCommitment: Uint8Array;
 }

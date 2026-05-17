@@ -5,69 +5,71 @@ const _descriptor_0 = new __compactRuntime.CompactTypeBytes(32);
 
 const _descriptor_1 = __compactRuntime.CompactTypeOpaqueString;
 
-const _descriptor_2 = __compactRuntime.CompactTypeBoolean;
+const _descriptor_2 = new __compactRuntime.CompactTypeUnsignedInteger(255n, 1);
 
-const _descriptor_3 = new __compactRuntime.CompactTypeVector(4, _descriptor_0);
+const _descriptor_3 = __compactRuntime.CompactTypeBoolean;
 
-const _descriptor_4 = new __compactRuntime.CompactTypeUnsignedInteger(18446744073709551615n, 8);
+const _descriptor_4 = new __compactRuntime.CompactTypeVector(4, _descriptor_0);
+
+const _descriptor_5 = new __compactRuntime.CompactTypeUnsignedInteger(18446744073709551615n, 8);
 
 class _tuple_0 {
   alignment() {
-    return _descriptor_4.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment())));
+    return _descriptor_5.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment())));
   }
   fromValue(value_0) {
     return [
-      _descriptor_4.fromValue(value_0),
+      _descriptor_5.fromValue(value_0),
       _descriptor_0.fromValue(value_0),
       _descriptor_0.fromValue(value_0),
       _descriptor_0.fromValue(value_0)
     ]
   }
   toValue(value_0) {
-    return _descriptor_4.toValue(value_0[0]).concat(_descriptor_0.toValue(value_0[1]).concat(_descriptor_0.toValue(value_0[2]).concat(_descriptor_0.toValue(value_0[3]))));
+    return _descriptor_5.toValue(value_0[0]).concat(_descriptor_0.toValue(value_0[1]).concat(_descriptor_0.toValue(value_0[2]).concat(_descriptor_0.toValue(value_0[3]))));
   }
 }
 
-const _descriptor_5 = new _tuple_0();
+const _descriptor_6 = new _tuple_0();
 
 class _tuple_1 {
   alignment() {
-    return _descriptor_4.alignment().concat(_descriptor_3.alignment().concat(_descriptor_3.alignment().concat(_descriptor_0.alignment())));
+    return _descriptor_5.alignment().concat(_descriptor_4.alignment().concat(_descriptor_4.alignment().concat(_descriptor_0.alignment())));
   }
   fromValue(value_0) {
     return [
+      _descriptor_5.fromValue(value_0),
       _descriptor_4.fromValue(value_0),
-      _descriptor_3.fromValue(value_0),
-      _descriptor_3.fromValue(value_0),
+      _descriptor_4.fromValue(value_0),
       _descriptor_0.fromValue(value_0)
     ]
   }
   toValue(value_0) {
-    return _descriptor_4.toValue(value_0[0]).concat(_descriptor_3.toValue(value_0[1]).concat(_descriptor_3.toValue(value_0[2]).concat(_descriptor_0.toValue(value_0[3]))));
+    return _descriptor_5.toValue(value_0[0]).concat(_descriptor_4.toValue(value_0[1]).concat(_descriptor_4.toValue(value_0[2]).concat(_descriptor_0.toValue(value_0[3]))));
   }
 }
 
-const _descriptor_6 = new _tuple_1();
+const _descriptor_7 = new _tuple_1();
 
 class _Either_0 {
   alignment() {
-    return _descriptor_2.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment()));
+    return _descriptor_3.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment()));
   }
   fromValue(value_0) {
     return {
-      is_left: _descriptor_2.fromValue(value_0),
+      is_left: _descriptor_3.fromValue(value_0),
       left: _descriptor_0.fromValue(value_0),
       right: _descriptor_0.fromValue(value_0)
     }
   }
   toValue(value_0) {
-    return _descriptor_2.toValue(value_0.is_left).concat(_descriptor_0.toValue(value_0.left).concat(_descriptor_0.toValue(value_0.right)));
+    return _descriptor_3.toValue(value_0.is_left).concat(_descriptor_0.toValue(value_0.left).concat(_descriptor_0.toValue(value_0.right)));
   }
 }
 
-const _descriptor_7 = new _Either_0();
+const _descriptor_8 = new _Either_0();
 
-const _descriptor_8 = new __compactRuntime.CompactTypeUnsignedInteger(340282366920938463463374607431768211455n, 16);
+const _descriptor_9 = new __compactRuntime.CompactTypeUnsignedInteger(340282366920938463463374607431768211455n, 16);
 
 class _ContractAddress_0 {
   alignment() {
@@ -83,9 +85,7 @@ class _ContractAddress_0 {
   }
 }
 
-const _descriptor_9 = new _ContractAddress_0();
-
-const _descriptor_10 = new __compactRuntime.CompactTypeUnsignedInteger(255n, 1);
+const _descriptor_10 = new _ContractAddress_0();
 
 export class Contract {
   witnesses;
@@ -121,8 +121,8 @@ export class Contract {
     if (typeof(witnesses_0.offerSalt) !== 'function') {
       throw new __compactRuntime.CompactError('first (witnesses) argument to Contract constructor does not contain a function-valued field named offerSalt');
     }
-    if (typeof(witnesses_0.offerPriceBand) !== 'function') {
-      throw new __compactRuntime.CompactError('first (witnesses) argument to Contract constructor does not contain a function-valued field named offerPriceBand');
+    if (typeof(witnesses_0.offerPriceBandCode) !== 'function') {
+      throw new __compactRuntime.CompactError('first (witnesses) argument to Contract constructor does not contain a function-valued field named offerPriceBandCode');
     }
     this.witnesses = witnesses_0;
     this.circuits = {
@@ -135,7 +135,7 @@ export class Contract {
         if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.currentQueryContext != undefined)) {
           __compactRuntime.typeError('registerIntent',
                                      'argument 1 (as invoked from Typescript)',
-                                     'SilentIntent.compact line 29 char 1',
+                                     'SilentIntent.compact line 31 char 1',
                                      'CircuitContext',
                                      contextOrig_0)
         }
@@ -164,7 +164,7 @@ export class Contract {
         if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.currentQueryContext != undefined)) {
           __compactRuntime.typeError('evaluateOffer',
                                      'argument 1 (as invoked from Typescript)',
-                                     'SilentIntent.compact line 45 char 1',
+                                     'SilentIntent.compact line 47 char 1',
                                      'CircuitContext',
                                      contextOrig_0)
         }
@@ -233,8 +233,8 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(0n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(0n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_1.toValue(''),
                                                                                               alignment: _descriptor_1.alignment() }).encode() } },
@@ -243,8 +243,8 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(1n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(1n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_1.toValue(''),
                                                                                               alignment: _descriptor_1.alignment() }).encode() } },
@@ -253,28 +253,28 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(2n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(2n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(false),
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_3.toValue(false),
+                                                                                              alignment: _descriptor_3.alignment() }).encode() } },
+                                       { ins: { cached: false, n: 1 } }]);
+    __compactRuntime.queryLedgerState(context,
+                                      partialProofData,
+                                      [
+                                       { push: { storage: false,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(3n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
+                                       { push: { storage: true,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(0n),
                                                                                               alignment: _descriptor_2.alignment() }).encode() } },
                                        { ins: { cached: false, n: 1 } }]);
     __compactRuntime.queryLedgerState(context,
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(3n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
-                                       { push: { storage: true,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_1.toValue(''),
-                                                                                              alignment: _descriptor_1.alignment() }).encode() } },
-                                       { ins: { cached: false, n: 1 } }]);
-    __compactRuntime.queryLedgerState(context,
-                                      partialProofData,
-                                      [
-                                       { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(4n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(4n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(new Uint8Array(32)),
                                                                                               alignment: _descriptor_0.alignment() }).encode() } },
@@ -283,8 +283,8 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(5n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(5n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(new Uint8Array(32)),
                                                                                               alignment: _descriptor_0.alignment() }).encode() } },
@@ -297,11 +297,11 @@ export class Contract {
     }
   }
   _persistentHash_0(value_0) {
-    const result_0 = __compactRuntime.persistentHash(_descriptor_5, value_0);
+    const result_0 = __compactRuntime.persistentHash(_descriptor_6, value_0);
     return result_0;
   }
   _persistentHash_1(value_0) {
-    const result_0 = __compactRuntime.persistentHash(_descriptor_6, value_0);
+    const result_0 = __compactRuntime.persistentHash(_descriptor_7, value_0);
     return result_0;
   }
   _maxPriceCents_0(context, partialProofData) {
@@ -316,8 +316,8 @@ export class Contract {
                                  result_0)
     }
     partialProofData.privateTranscriptOutputs.push({
-      value: _descriptor_4.toValue(result_0),
-      alignment: _descriptor_4.alignment()
+      value: _descriptor_5.toValue(result_0),
+      alignment: _descriptor_5.alignment()
     });
     return result_0;
   }
@@ -384,8 +384,8 @@ export class Contract {
                                  result_0)
     }
     partialProofData.privateTranscriptOutputs.push({
-      value: _descriptor_4.toValue(result_0),
-      alignment: _descriptor_4.alignment()
+      value: _descriptor_5.toValue(result_0),
+      alignment: _descriptor_5.alignment()
     });
     return result_0;
   }
@@ -401,8 +401,8 @@ export class Contract {
                                  result_0)
     }
     partialProofData.privateTranscriptOutputs.push({
-      value: _descriptor_3.toValue(result_0),
-      alignment: _descriptor_3.alignment()
+      value: _descriptor_4.toValue(result_0),
+      alignment: _descriptor_4.alignment()
     });
     return result_0;
   }
@@ -418,8 +418,8 @@ export class Contract {
                                  result_0)
     }
     partialProofData.privateTranscriptOutputs.push({
-      value: _descriptor_3.toValue(result_0),
-      alignment: _descriptor_3.alignment()
+      value: _descriptor_4.toValue(result_0),
+      alignment: _descriptor_4.alignment()
     });
     return result_0;
   }
@@ -440,13 +440,20 @@ export class Contract {
     });
     return result_0;
   }
-  _offerPriceBand_0(context, partialProofData) {
+  _offerPriceBandCode_0(context, partialProofData) {
     const witnessContext_0 = __compactRuntime.createWitnessContext(ledger(context.currentQueryContext.state), context.currentPrivateState, context.currentQueryContext.address);
-    const [nextPrivateState_0, result_0] = this.witnesses.offerPriceBand(witnessContext_0);
+    const [nextPrivateState_0, result_0] = this.witnesses.offerPriceBandCode(witnessContext_0);
     context.currentPrivateState = nextPrivateState_0;
+    if (!(typeof(result_0) === 'bigint' && result_0 >= 0n && result_0 <= 255n)) {
+      __compactRuntime.typeError('offerPriceBandCode',
+                                 'return value',
+                                 'SilentIntent.compact line 20 char 1',
+                                 'Uint<0..256>',
+                                 result_0)
+    }
     partialProofData.privateTranscriptOutputs.push({
-      value: _descriptor_1.toValue(result_0),
-      alignment: _descriptor_1.alignment()
+      value: _descriptor_2.toValue(result_0),
+      alignment: _descriptor_2.alignment()
     });
     return result_0;
   }
@@ -465,8 +472,8 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(1n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(1n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_1.toValue(newPolicyId_0),
                                                                                               alignment: _descriptor_1.alignment() }).encode() } },
@@ -475,8 +482,8 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(4n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(4n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(commitment_0),
                                                                                               alignment: _descriptor_0.alignment() }).encode() } },
@@ -485,11 +492,11 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(2n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
-                                       { push: { storage: true,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(false),
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(2n),
                                                                                               alignment: _descriptor_2.alignment() }).encode() } },
+                                       { push: { storage: true,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_3.toValue(false),
+                                                                                              alignment: _descriptor_3.alignment() }).encode() } },
                                        { ins: { cached: false, n: 1 } }]);
     return [];
   }
@@ -515,8 +522,8 @@ export class Contract {
                                                                                                               pushPath: false,
                                                                                                               path: [
                                                                                                                      { tag: 'value',
-                                                                                                                       value: { value: _descriptor_10.toValue(4n),
-                                                                                                                                alignment: _descriptor_10.alignment() } }] } },
+                                                                                                                       value: { value: _descriptor_2.toValue(4n),
+                                                                                                                                alignment: _descriptor_2.alignment() } }] } },
                                                                                                      { popeq: { cached: false,
                                                                                                                 result: undefined } }]).value),
                                           computedIntent_0),
@@ -541,18 +548,70 @@ export class Contract {
                            ||
                            this._equal_8(forbidHashes_0[3], buyerForbidHash_0);
     __compactRuntime.assert(!hasForbidden_0, 'Forbidden term detected in offer');
+    const bandCode_0 = this._offerPriceBandCode_0(context, partialProofData);
+    __compactRuntime.assert(this._equal_9(bandCode_0, 1n)
+                            ||
+                            this._equal_10(bandCode_0, 2n)
+                            ||
+                            this._equal_11(bandCode_0, 3n)
+                            ||
+                            this._equal_12(bandCode_0, 4n)
+                            ||
+                            this._equal_13(bandCode_0, 5n)
+                            ||
+                            this._equal_14(bandCode_0, 6n)
+                            ||
+                            this._equal_15(bandCode_0, 7n),
+                            'Price band code must be 1-7');
+    __compactRuntime.assert(!this._equal_16(bandCode_0, 1n)
+                            ||
+                            vendorPrice_0 <= 50000n,
+                            'Band 1: price must be <= $500');
+    __compactRuntime.assert(!this._equal_17(bandCode_0, 2n)
+                            ||
+                            !(vendorPrice_0 <= 50000n)
+                            &&
+                            vendorPrice_0 <= 100000n,
+                            'Band 2: price must be $500-$1,000');
+    __compactRuntime.assert(!this._equal_18(bandCode_0, 3n)
+                            ||
+                            !(vendorPrice_0 <= 100000n)
+                            &&
+                            vendorPrice_0 <= 200000n,
+                            'Band 3: price must be $1,000-$2,000');
+    __compactRuntime.assert(!this._equal_19(bandCode_0, 4n)
+                            ||
+                            !(vendorPrice_0 <= 200000n)
+                            &&
+                            vendorPrice_0 <= 250000n,
+                            'Band 4: price must be $2,000-$2,500');
+    __compactRuntime.assert(!this._equal_20(bandCode_0, 5n)
+                            ||
+                            !(vendorPrice_0 <= 250000n)
+                            &&
+                            vendorPrice_0 <= 500000n,
+                            'Band 5: price must be $2,500-$5,000');
+    __compactRuntime.assert(!this._equal_21(bandCode_0, 6n)
+                            ||
+                            !(vendorPrice_0 <= 500000n)
+                            &&
+                            vendorPrice_0 <= 1000000n,
+                            'Band 6: price must be $5,000-$10,000');
+    __compactRuntime.assert(!this._equal_22(bandCode_0, 7n)
+                            ||
+                            !(vendorPrice_0 <= 1000000n),
+                            'Band 7: price must be > $10,000');
     const vendorSalt_0 = this._offerSalt_0(context, partialProofData);
     const offerComm_0 = this._persistentHash_1([vendorPrice_0,
                                                 credHashes_0,
                                                 forbidHashes_0,
                                                 vendorSalt_0]);
-    const band_0 = this._offerPriceBand_0(context, partialProofData);
     __compactRuntime.queryLedgerState(context,
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(0n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(0n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_1.toValue(newDealId_0),
                                                                                               alignment: _descriptor_1.alignment() }).encode() } },
@@ -561,18 +620,18 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(3n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(3n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_1.toValue(band_0),
-                                                                                              alignment: _descriptor_1.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(bandCode_0),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { ins: { cached: false, n: 1 } }]);
     __compactRuntime.queryLedgerState(context,
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(5n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(5n),
+                                                                                              alignment: _descriptor_2.alignment() }).encode() } },
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(offerComm_0),
                                                                                               alignment: _descriptor_0.alignment() }).encode() } },
@@ -581,11 +640,11 @@ export class Contract {
                                       partialProofData,
                                       [
                                        { push: { storage: false,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_10.toValue(2n),
-                                                                                              alignment: _descriptor_10.alignment() }).encode() } },
-                                       { push: { storage: true,
-                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(true),
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_2.toValue(2n),
                                                                                               alignment: _descriptor_2.alignment() }).encode() } },
+                                       { push: { storage: true,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_3.toValue(true),
+                                                                                              alignment: _descriptor_3.alignment() }).encode() } },
                                        { ins: { cached: false, n: 1 } }]);
     return [];
   }
@@ -625,6 +684,62 @@ export class Contract {
     if (!x0.every((x, i) => y0[i] === x)) { return false; }
     return true;
   }
+  _equal_9(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_10(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_11(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_12(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_13(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_14(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_15(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_16(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_17(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_18(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_19(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_20(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_21(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
+  _equal_22(x0, y0) {
+    if (x0 !== y0) { return false; }
+    return true;
+  }
 }
 export function ledger(stateOrChargedState) {
   const state = stateOrChargedState instanceof __compactRuntime.StateValue ? stateOrChargedState : stateOrChargedState.state;
@@ -649,8 +764,8 @@ export function ledger(stateOrChargedState) {
                                                                                  pushPath: false,
                                                                                  path: [
                                                                                         { tag: 'value',
-                                                                                          value: { value: _descriptor_10.toValue(0n),
-                                                                                                   alignment: _descriptor_10.alignment() } }] } },
+                                                                                          value: { value: _descriptor_2.toValue(0n),
+                                                                                                   alignment: _descriptor_2.alignment() } }] } },
                                                                         { popeq: { cached: false,
                                                                                    result: undefined } }]).value);
     },
@@ -663,12 +778,26 @@ export function ledger(stateOrChargedState) {
                                                                                  pushPath: false,
                                                                                  path: [
                                                                                         { tag: 'value',
-                                                                                          value: { value: _descriptor_10.toValue(1n),
-                                                                                                   alignment: _descriptor_10.alignment() } }] } },
+                                                                                          value: { value: _descriptor_2.toValue(1n),
+                                                                                                   alignment: _descriptor_2.alignment() } }] } },
                                                                         { popeq: { cached: false,
                                                                                    result: undefined } }]).value);
     },
-    get settlementAuthorized() {
+    get policyVerified() {
+      return _descriptor_3.fromValue(__compactRuntime.queryLedgerState(context,
+                                                                       partialProofData,
+                                                                       [
+                                                                        { dup: { n: 0 } },
+                                                                        { idx: { cached: false,
+                                                                                 pushPath: false,
+                                                                                 path: [
+                                                                                        { tag: 'value',
+                                                                                          value: { value: _descriptor_2.toValue(2n),
+                                                                                                   alignment: _descriptor_2.alignment() } }] } },
+                                                                        { popeq: { cached: false,
+                                                                                   result: undefined } }]).value);
+    },
+    get priceBandCode() {
       return _descriptor_2.fromValue(__compactRuntime.queryLedgerState(context,
                                                                        partialProofData,
                                                                        [
@@ -677,22 +806,8 @@ export function ledger(stateOrChargedState) {
                                                                                  pushPath: false,
                                                                                  path: [
                                                                                         { tag: 'value',
-                                                                                          value: { value: _descriptor_10.toValue(2n),
-                                                                                                   alignment: _descriptor_10.alignment() } }] } },
-                                                                        { popeq: { cached: false,
-                                                                                   result: undefined } }]).value);
-    },
-    get priceBand() {
-      return _descriptor_1.fromValue(__compactRuntime.queryLedgerState(context,
-                                                                       partialProofData,
-                                                                       [
-                                                                        { dup: { n: 0 } },
-                                                                        { idx: { cached: false,
-                                                                                 pushPath: false,
-                                                                                 path: [
-                                                                                        { tag: 'value',
-                                                                                          value: { value: _descriptor_10.toValue(3n),
-                                                                                                   alignment: _descriptor_10.alignment() } }] } },
+                                                                                          value: { value: _descriptor_2.toValue(3n),
+                                                                                                   alignment: _descriptor_2.alignment() } }] } },
                                                                         { popeq: { cached: false,
                                                                                    result: undefined } }]).value);
     },
@@ -705,8 +820,8 @@ export function ledger(stateOrChargedState) {
                                                                                  pushPath: false,
                                                                                  path: [
                                                                                         { tag: 'value',
-                                                                                          value: { value: _descriptor_10.toValue(4n),
-                                                                                                   alignment: _descriptor_10.alignment() } }] } },
+                                                                                          value: { value: _descriptor_2.toValue(4n),
+                                                                                                   alignment: _descriptor_2.alignment() } }] } },
                                                                         { popeq: { cached: false,
                                                                                    result: undefined } }]).value);
     },
@@ -719,8 +834,8 @@ export function ledger(stateOrChargedState) {
                                                                                  pushPath: false,
                                                                                  path: [
                                                                                         { tag: 'value',
-                                                                                          value: { value: _descriptor_10.toValue(5n),
-                                                                                                   alignment: _descriptor_10.alignment() } }] } },
+                                                                                          value: { value: _descriptor_2.toValue(5n),
+                                                                                                   alignment: _descriptor_2.alignment() } }] } },
                                                                         { popeq: { cached: false,
                                                                                    result: undefined } }]).value);
     }
@@ -738,7 +853,7 @@ const _dummyContract = new Contract({
   offerCredentialHashes: (...args) => undefined,
   offerDetectedForbiddenHashes: (...args) => undefined,
   offerSalt: (...args) => undefined,
-  offerPriceBand: (...args) => undefined
+  offerPriceBandCode: (...args) => undefined
 });
 export const pureCircuits = {};
 export const contractReferenceLocations =

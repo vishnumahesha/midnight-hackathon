@@ -13,15 +13,17 @@ witness offerCredentialHashes(): Vector<4, Bytes<32>>;
 witness offerDetectedForbiddenHashes(): Vector<4, Bytes<32>>;
 witness offerSalt(): Bytes<32>;
 
-// ── Opaque witnesses: computed by TypeScript driver, disclosed as-is ─────────
-witness offerDealId(): Opaque<"string">;
-witness offerPriceBand(): Opaque<"string">;
+// ── Price band code: prover-supplied, range-checked in-circuit ────────────────
+// Band boundaries (cents): 1=$0-$500, 2=$500-$1k, 3=$1k-$2k,
+//   4=$2k-$2.5k, 5=$2.5k-$5k, 6=$5k-$10k, 7=$10k+
+// Prover cannot forge a cheaper-looking band: range assertions force unique code.
+witness offerPriceBandCode(): Uint<8>;
 
 // ── Public ledger state (visible on-chain after proof) ───────────────────────
 export ledger dealId: Opaque<"string">;
 export ledger policyId: Opaque<"string">;
-export ledger settlementAuthorized: Boolean;
-export ledger priceBand: Opaque<"string">;
+export ledger policyVerified: Boolean;
+export ledger priceBandCode: Uint<8>;
 export ledger intentCommitment: Bytes<32>;
 export ledger offerCommitment: Bytes<32>;
 
@@ -36,9 +38,9 @@ export circuit registerIntent(newPolicyId: Opaque<"string">): [] {
     [buyerMaxPrice, buyerCredHash, buyerForbidHash, buyerSalt]
   );
 
-  policyId             = disclose(newPolicyId);
-  intentCommitment     = disclose(commitment);
-  settlementAuthorized = false;
+  policyId         = disclose(newPolicyId);
+  intentCommitment = disclose(commitment);
+  policyVerified   = false;
 }
 
 // ── Circuit 2: Evaluate a vendor offer against the stored intent commitment ───
@@ -74,15 +76,36 @@ export circuit evaluateOffer(newDealId: Opaque<"string">): [] {
                              || (forbidHashes[3] == buyerForbidHash);
   assert(!hasForbidden, "Forbidden term detected in offer");
 
-  // ── Ledger writes: compute offer commitment and disclose public outputs ─────
+  // ── Constraint 5: Price band code is consistent with actual offer price ─────
+  // Uses assertion-based range proofs (no conditional branches — ZK-safe).
+  // Non-overlapping bands force a unique valid code for every price point.
+  const bandCode: Uint<8> = offerPriceBandCode();
+  assert((bandCode == 1) || (bandCode == 2) || (bandCode == 3) || (bandCode == 4)
+      || (bandCode == 5) || (bandCode == 6) || (bandCode == 7),
+    "Price band code must be 1-7");
+  assert(!(bandCode == 1) || (vendorPrice <= 50000),
+    "Band 1: price must be <= $500");
+  assert(!(bandCode == 2) || (!(vendorPrice <= 50000) && (vendorPrice <= 100000)),
+    "Band 2: price must be $500-$1,000");
+  assert(!(bandCode == 3) || (!(vendorPrice <= 100000) && (vendorPrice <= 200000)),
+    "Band 3: price must be $1,000-$2,000");
+  assert(!(bandCode == 4) || (!(vendorPrice <= 200000) && (vendorPrice <= 250000)),
+    "Band 4: price must be $2,000-$2,500");
+  assert(!(bandCode == 5) || (!(vendorPrice <= 250000) && (vendorPrice <= 500000)),
+    "Band 5: price must be $2,500-$5,000");
+  assert(!(bandCode == 6) || (!(vendorPrice <= 500000) && (vendorPrice <= 1000000)),
+    "Band 6: price must be $5,000-$10,000");
+  assert(!(bandCode == 7) || !(vendorPrice <= 1000000),
+    "Band 7: price must be > $10,000");
+
+  // ── Ledger writes ──────────────────────────────────────────────────────────
   const vendorSalt: Bytes<32> = offerSalt();
   const offerComm: Bytes<32> = persistentHash<[Uint<64>, Vector<4, Bytes<32>>, Vector<4, Bytes<32>>, Bytes<32>]>(
     [vendorPrice, credHashes, forbidHashes, vendorSalt]
   );
 
-  const band: Opaque<"string"> = offerPriceBand();
-  dealId               = disclose(newDealId);
-  priceBand            = disclose(band);
-  offerCommitment      = disclose(offerComm);
-  settlementAuthorized = true;
+  dealId          = disclose(newDealId);
+  priceBandCode   = disclose(bandCode);
+  offerCommitment = disclose(offerComm);
+  policyVerified  = true;
 }

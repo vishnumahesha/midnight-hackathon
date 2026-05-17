@@ -124,12 +124,12 @@
       }
     },
     {
-      "name": "offerPriceBand",
+      "name": "offerPriceBandCode",
       "arguments": [
       ],
       "result type": {
-        "type-name": "Opaque",
-        "tsType": "string"
+        "type-name": "Uint",
+        "maxval": 255
       }
     }
   ],
@@ -157,7 +157,7 @@
       }
     },
     {
-      "name": "settlementAuthorized",
+      "name": "policyVerified",
       "index": 2,
       "exported": true,
       "storage": "Cell",
@@ -166,13 +166,13 @@
       }
     },
     {
-      "name": "priceBand",
+      "name": "priceBandCode",
       "index": 3,
       "exported": true,
       "storage": "Cell",
       "type": {
-        "type-name": "Opaque",
-        "tsType": "string"
+        "type-name": "Uint",
+        "maxval": 255
       }
     },
     {
