@@ -22,7 +22,12 @@ Extract the following fields and return ONLY valid JSON with no other text:
   "priceCents": <price in cents as integer, e.g. $1,900 = 190000>,
   "category": "<one of: lead_data, analytics, infrastructure, saas, consulting>",
   "credentials": [<up to 4 strings describing verifiable capabilities, e.g. "freshness_verified", "weekly_refresh", "licensed_sources", "opt_out_screening", "audit_logs", "high_volume", "crm_enrichment">],
-  "forbiddenTermsDetected": [<up to 4 strings identifying risky clauses. Look for: data reuse for partner enrichment, cross-client modeling, audience expansion, campaign metadata sharing, resale of buyer data. Use snake_case identifiers like "campaign_metadata_reuse". If none found, return empty array.>],
+  "forbiddenTermsDetected": [<use ONLY identifiers from the canonical list below. Map ALL variations of each concept to the exact canonical identifier shown. If none apply, return an empty array.
+
+CANONICAL VOCABULARY (these are the only valid strings):
+- "campaign_metadata_reuse" — matches ANY of: cross-client modeling, audience expansion, benchmark optimization across clients or similar customers, campaign metadata sharing, partner enrichment using buyer data, cross-customer data use, shared audience profiling, resale of buyer data to partners
+
+Return ONLY these exact canonical strings. Never paraphrase or invent new identifiers.>],
   "summary": "<one sentence: what makes this vendor good or risky>"
 }
 
@@ -30,7 +35,7 @@ CRITICAL RULES:
 - Return ONLY the JSON object. No markdown, no backticks, no explanation.
 - priceCents must be an integer (dollars * 100).
 - credentials and forbiddenTermsDetected arrays must each have AT MOST 4 items.
-- For forbiddenTermsDetected: read the ENTIRE proposal carefully. Risky clauses are often buried in mid-paragraph legalese that sounds routine. Phrases like "partner enrichment," "audience modeling," "benchmark optimization across similar customers," or "cross-client modeling" are red flags.
+- For forbiddenTermsDetected: read the ENTIRE proposal carefully. Risky clauses are often buried in mid-paragraph legalese. You MUST map any detected risk to a canonical identifier from the vocabulary above — never return a paraphrase.
 - If no risky clauses exist, return an empty array for forbiddenTermsDetected.
 - Do not invent credentials or forbidden terms that aren't in the text.`;
 
